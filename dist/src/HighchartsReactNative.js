@@ -48,7 +48,11 @@ export default class HighchartsReactNative extends React.PureComponent {
         }
     }
     
-    getAssetAsString = async (asset) => {
+   getAssetAsString = async (asset) => {
+        if (!__DEV__) {
+            return await FileSystem.readAsStringAsync(asset.uri);
+        }
+
         const downloadedModules = await FileSystem.readDirectoryAsync(FileSystem.cacheDirectory)
         let fileName = 'ExponentAsset-' + asset.hash + '.' + asset.type
 
@@ -58,7 +62,6 @@ export default class HighchartsReactNative extends React.PureComponent {
 
         return await FileSystem.readAsStringAsync(FileSystem.cacheDirectory + fileName)
     }
-
     addScript = async (name, isModule, useCDN) => {
         if(useCDN) {
             const response = await fetch(
